@@ -26,7 +26,7 @@ require_once($CFG->libdir . '/adminlib.php');
 require_once(__DIR__ . '/locallib.php');
 
 require_login(null, false);
-require_capability('moodle/site:config', context_system::instance());
+require_capability('tool/crawler:changesettings', context_system::instance());
 admin_externalpage_setup('tool_crawler_status');
 
 echo $OUTPUT->header();

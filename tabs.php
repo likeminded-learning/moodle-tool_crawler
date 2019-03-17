@@ -24,46 +24,58 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$reports = array('queued', 'recent', 'broken', 'oversize');
+$tabs = '';
 
-$tabs = '<p>';
-if (isset($courseid) && $courseid) {
-    foreach ($reports as $rpt) {
-        if ($rpt != 'queued') {
-            $tabs .= ' | ';
+if (has_capability('tool/crawler:viewreports', context_system::instance()))
+{
+    $reports = array('queued', 'recent', 'broken', 'oversize');
+    $tabs    = '<p>';
+    if ((isset($courseid) && $courseid))
+    {
+        foreach ($reports as $rpt)
+        {
+            if ($rpt != 'queued')
+            {
+                $tabs .= ' | ';
+            }
+            $wrap = (isset($report) && $report == $rpt) ? 'b' : 'span';
+            $tabs .= html_writer::start_tag($wrap);
+            $tabs .= html_writer::link(new moodle_url('/admin/tool/crawler/report.php',
+                array('report' => $rpt, 'course' => $courseid)),
+                get_string($rpt, 'tool_crawler'));
+            $tabs .= html_writer::end_tag($wrap);
         }
-        $wrap = (isset($report) && $report == $rpt) ? 'b' : 'span';
-        $tabs .= html_writer::start_tag($wrap);
-        $tabs .= html_writer::link(new moodle_url('/admin/tool/crawler/report.php',
-                array('report' => $rpt, 'course' => $courseid )),
-                get_string($rpt, 'tool_crawler'));
-        $tabs .= html_writer::end_tag($wrap);
     }
-} else {
+    else
+    {
+        if (has_capability('tool/crawler:changesettings', context_system::instance()))
+        {
+            $section = optional_param('section', '', PARAM_RAW);
+            $wrap    = ($section == 'tool_crawler') ? 'b' : 'span';
+            $tabs    .= html_writer::start_tag($wrap);
+            $tabs    .= html_writer::link(new moodle_url("/admin/settings.php?section=tool_crawler"),
+                get_string('settings', 'tool_crawler'));
+            $tabs    .= html_writer::end_tag($wrap);
 
-    $section = optional_param('section', '', PARAM_RAW);
-    $wrap = ($section == 'tool_crawler') ? 'b' : 'span';
-    $tabs .= html_writer::start_tag($wrap);
-    $tabs .= html_writer::link(new moodle_url("/admin/settings.php?section=tool_crawler"),
-        get_string('settings', 'tool_crawler'));
-    $tabs .= html_writer::end_tag($wrap);
+            $tabs .= ' | ';
 
-    $tabs .= ' | ';
+            $wrap = (isset($report) && $report == 'index') ? 'b' : 'span';
+            $tabs .= html_writer::start_tag($wrap);
+            $tabs .= html_writer::link(new moodle_url("/admin/tool/crawler/index.php"),
+                get_string('status', 'tool_crawler'));
+            $tabs .= html_writer::end_tag($wrap);
+        }
 
-    $wrap = (isset($report) && $report == 'index') ? 'b' : 'span';
-    $tabs .= html_writer::start_tag($wrap);
-    $tabs .= html_writer::link(new moodle_url("/admin/tool/crawler/index.php"),
-            get_string('status', 'tool_crawler'));
-    $tabs .= html_writer::end_tag($wrap);
-
-    foreach ($reports as $rpt) {
-        $tabs .= ' | ';
-        $wrap = (isset($report) && $report == $rpt) ? 'b' : 'span';
-        $tabs .= html_writer::start_tag($wrap);
-        $tabs .= html_writer::link(new moodle_url('/admin/tool/crawler/report.php', array('report' => $rpt )),
+        foreach ($reports as $rpt)
+        {
+            $tabs .= $tabs == '<p>' ? '' : ' | ';
+            $wrap = (isset($report) && $report == $rpt) ? 'b' : 'span';
+            $tabs .= html_writer::start_tag($wrap);
+            $tabs .= html_writer::link(new moodle_url('/admin/tool/crawler/report.php', array('report' => $rpt)),
                 get_string($rpt, 'tool_crawler'));
-        $tabs .= html_writer::end_tag($wrap);
+            $tabs .= html_writer::end_tag($wrap);
+        }
     }
+
+    $tabs .= '</p>';
 }
-$tabs .= '</p>';
-

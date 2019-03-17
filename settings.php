@@ -24,34 +24,34 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
-if ($hassiteconfig) {
-
+// Report category
+if (has_capability('tool/crawler:viewreports', context_system::instance())) {
     // Site admin reports.
     $cat = new admin_category('tool_crawler_cat', 'Link crawler');
     $ADMIN->add('reports', $cat);
 
-    $ADMIN->add('tool_crawler_cat', new admin_externalpage('tool_crawler_status',
-                                           get_string('status', 'tool_crawler'),
-                                           $CFG->wwwroot . '/admin/tool/crawler/index.php') );
+    if (has_capability('tool/crawler:changesettings', context_system::instance())){
+        $ADMIN->add('tool_crawler_cat', new admin_externalpage('tool_crawler_status',
+            get_string('status', 'tool_crawler'),
+            $CFG->wwwroot . '/admin/tool/crawler/index.php') );
+    }
 
     $ADMIN->add('tool_crawler_cat', new admin_externalpage('tool_crawler_queued',
-                                           get_string('queued', 'tool_crawler'),
-                                           $CFG->wwwroot . '/admin/tool/crawler/report.php?report=queued') );
-
+        get_string('queued', 'tool_crawler'),
+        $CFG->wwwroot . '/admin/tool/crawler/report.php?report=queued'));
     $ADMIN->add('tool_crawler_cat', new admin_externalpage('tool_crawler_recent',
-                                           get_string('recent', 'tool_crawler'),
-                                           $CFG->wwwroot . '/admin/tool/crawler/report.php?report=recent') );
-
+        get_string('recent', 'tool_crawler'),
+        $CFG->wwwroot . '/admin/tool/crawler/report.php?report=recent'));
     $ADMIN->add('tool_crawler_cat', new admin_externalpage('tool_crawler_broken',
-                                           get_string('broken', 'tool_crawler'),
-                                           $CFG->wwwroot . '/admin/tool/crawler/report.php?report=broken') );
-
+        get_string('broken', 'tool_crawler'),
+        $CFG->wwwroot . '/admin/tool/crawler/report.php?report=broken'));
     $ADMIN->add('tool_crawler_cat', new admin_externalpage('tool_crawler_oversize',
-                                           get_string('oversize', 'tool_crawler'),
-                                           $CFG->wwwroot . '/admin/tool/crawler/report.php?report=oversize') );
+        get_string('oversize', 'tool_crawler'),
+        $CFG->wwwroot . '/admin/tool/crawler/report.php?report=oversize'));
+}
 
-
-    // Local plugin settings.
+// Plugin settings category
+if (has_capability('tool/crawler:changesettings', context_system::instance())){
     $settings = new admin_settingpage('tool_crawler', get_string('pluginname', 'tool_crawler'));
 
     $ADMIN->add('tools', $settings);
@@ -59,41 +59,41 @@ if ($hassiteconfig) {
 
         require("$CFG->dirroot/admin/tool/crawler/tabs.php");
         $settings->add(new admin_setting_heading('tool_crawler',
-                                                    '',
-                                                    $tabs
-                                                    ));
+            '',
+            $tabs
+        ));
 
         $settings->add(new admin_setting_configtext('tool_crawler/seedurl',
-                                                    new lang_string('seedurl',           'tool_crawler'),
-                                                    new lang_string('seedurldesc',       'tool_crawler'),
-                                                    '/' ));
+            new lang_string('seedurl',           'tool_crawler'),
+            new lang_string('seedurldesc',       'tool_crawler'),
+            '/' ));
 
         $settings->add(new admin_setting_configtext('tool_crawler/botusername',
-                                                    new lang_string('botusername',       'tool_crawler'),
-                                                    new lang_string('botusernamedesc',   'tool_crawler'),
-                                                    'moodlebot' ));
+            new lang_string('botusername',       'tool_crawler'),
+            new lang_string('botusernamedesc',   'tool_crawler'),
+            'moodlebot' ));
 
         $settings->add(new admin_setting_configpasswordunmask('tool_crawler/botpassword',
-                                                    new lang_string('botpassword',       'tool_crawler'),
-                                                    new lang_string('botpassworddesc',   'tool_crawler'),
-                                                    'moodlebot' ));
+            new lang_string('botpassword',       'tool_crawler'),
+            new lang_string('botpassworddesc',   'tool_crawler'),
+            'moodlebot' ));
 
         $settings->add(new admin_setting_configtext('tool_crawler/useragent',
-                                                    new lang_string('useragent',         'tool_crawler'),
-                                                    new lang_string('useragentdesc',     'tool_crawler'),
-                                                    'MoodleLinkChecker' ));
+            new lang_string('useragent',         'tool_crawler'),
+            new lang_string('useragentdesc',     'tool_crawler'),
+            'MoodleLinkChecker' ));
 
         $settings->add(new admin_setting_configtextarea('tool_crawler/excludeexturl',
-                                                    new lang_string('excludeexturl',     'tool_crawler'),
-                                                    new lang_string('excludeexturldesc', 'tool_crawler'),
-                                                    'http://moodle.org/
+            new lang_string('excludeexturl',     'tool_crawler'),
+            new lang_string('excludeexturldesc', 'tool_crawler'),
+            'http://moodle.org/
 http://validator.w3.org/
 http://www.contentquality.com/' ));
 
         $settings->add(new admin_setting_configtextarea('tool_crawler/excludemdlurl',
-                                                    new lang_string('excludemdlurl',     'tool_crawler'),
-                                                    new lang_string('excludemdlurldesc', 'tool_crawler'),
-                                                    "grading
+            new lang_string('excludemdlurl',     'tool_crawler'),
+            new lang_string('excludemdlurldesc', 'tool_crawler'),
+            "grading
 /admin
 /blog
 /badges
@@ -109,37 +109,37 @@ http://www.contentquality.com/' ));
 /tag/" ));
 
         $settings->add(new admin_setting_configtextarea('tool_crawler/excludemdlparam',
-                                                    new lang_string('excludemdlparam',     'tool_crawler'),
-                                                    new lang_string('excludemdlparamdesc', 'tool_crawler'),
-                                                    "sesskey
+            new lang_string('excludemdlparam',     'tool_crawler'),
+            new lang_string('excludemdlparamdesc', 'tool_crawler'),
+            "sesskey
 time
 lang
 useridlistid
 " ));
 
         $settings->add(new admin_setting_configtextarea('tool_crawler/excludemdldom',
-                                                    new lang_string('excludemdldom',     'tool_crawler'),
-                                                    new lang_string('excludemdldomdesc', 'tool_crawler'),
-                                                    ".block.block_settings
+            new lang_string('excludemdldom',     'tool_crawler'),
+            new lang_string('excludemdldomdesc', 'tool_crawler'),
+            ".block.block_settings
 .block.block_book_toc
 .block.block_calendar_month
 .block.block_navigation
 .block.block_cqu_assessment" ));
 
         $settings->add(new admin_setting_configtextarea('tool_crawler/excludecourses',
-                                                    new lang_string('excludecourses',       'tool_crawler'),
-                                                    new lang_string('excludecoursesdesc',   'tool_crawler'),
-                                                    "" ));
+            new lang_string('excludecourses',       'tool_crawler'),
+            new lang_string('excludecoursesdesc',   'tool_crawler'),
+            "" ));
 
         $options = array(
             0 => new lang_string('no'),
             1 => new lang_string('yes'),
         );
         $settings->add(new admin_setting_configselect('tool_crawler/uselogs',
-                                                      new lang_string('uselogs',        'tool_crawler'),
-                                                      new lang_string('uselogsdesc',    'tool_crawler'),
-                                                      0,
-                                                      $options));
+            new lang_string('uselogs',        'tool_crawler'),
+            new lang_string('uselogsdesc',    'tool_crawler'),
+            0,
+            $options));
 
         $robot = new \tool_crawler\robot\crawler();
         $days = $robot::get_config()->recentactivity;
@@ -148,24 +148,24 @@ useridlistid
         $recentactivitydesc = htmlspecialchars($recentactivitydesc, ENT_NOQUOTES | ENT_HTML401);
         $recentactivitydesc = preg_replace('/(\r\n?|\n)/', '<br>', $recentactivitydesc);
         $settings->add(new admin_setting_configtext('tool_crawler/recentactivity',
-                                                    new lang_string('recentactivity',    'tool_crawler'),
-                                                    $recentactivitydesc,
-                                                    '1'));
+            new lang_string('recentactivity',    'tool_crawler'),
+            $recentactivitydesc,
+            '1'));
 
         $settings->add(new admin_setting_configtext('tool_crawler/maxtime',
-                                                    new lang_string('maxtime',           'tool_crawler'),
-                                                    new lang_string('maxtimedesc',       'tool_crawler'),
-                                                    '60' ));
+            new lang_string('maxtime',           'tool_crawler'),
+            new lang_string('maxtimedesc',       'tool_crawler'),
+            '60' ));
 
         $settings->add(new admin_setting_configtext('tool_crawler/maxcrontime',
-                                                    new lang_string('maxcrontime',       'tool_crawler'),
-                                                    new lang_string('maxcrontimedesc',   'tool_crawler'),
-                                                    '60' ));
+            new lang_string('maxcrontime',       'tool_crawler'),
+            new lang_string('maxcrontimedesc',   'tool_crawler'),
+            '60' ));
 
         $settings->add(new admin_setting_configtext('tool_crawler/bigfilesize',
-                                                    new lang_string('bigfilesize',       'tool_crawler'),
-                                                    new lang_string('bigfilesizedesc',   'tool_crawler'),
-                                                    '1' ));
+            new lang_string('bigfilesize',       'tool_crawler'),
+            new lang_string('bigfilesizedesc',   'tool_crawler'),
+            '1' ));
 
         $options = array(
             86400 => new lang_string('secondstotime86400'),
@@ -177,10 +177,10 @@ useridlistid
             0 => new lang_string('never')
         );
         $settings->add(new admin_setting_configselect('tool_crawler/retentionperiod',
-                                                    new lang_string('retentionperiod',        'tool_crawler'),
-                                                    new lang_string('retentionperioddesc',    'tool_crawler'),
-                                                    2620800,
-                                                    $options));
+            new lang_string('retentionperiod',        'tool_crawler'),
+            new lang_string('retentionperioddesc',    'tool_crawler'),
+            2620800,
+            $options));
     }
 }
 
