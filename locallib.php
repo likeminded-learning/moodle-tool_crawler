@@ -125,7 +125,7 @@ function tool_crawler_url_create_page($url) {
 
     require_login(null, false);
     $context = context_system::instance();
-    require_capability('moodle/site:config', $context);
+    require_capability('tool/crawler:viewreports', $context);
 
     $navurl = new moodle_url('/admin/tool/crawler/url.php', array(
         'url' => $url

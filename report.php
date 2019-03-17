@@ -61,13 +61,16 @@ if ($courseid) {
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title( get_string($report, 'tool_crawler') );
     $sqlfilter = ' AND c.id = '.$courseid;
+ } else {
+    // If no course then this is higher permission report.
+    require_capability('tool/crawler:viewreports', context_system::instance());
+    $PAGE->set_context(context_system::instance());
+    $PAGE->set_url($baseurl);
+    $PAGE->set_pagelayout('admin');
+    $PAGE->set_totara_menu_selected('tool_crawler');
+    $PAGE->set_title(get_string('reportpagetitle', 'tool_crawler', get_string($report, 'tool_crawler')));
+ }
 
-} else {
-
-    // If no course then this is an admin only report.
-    require_capability('moodle/site:config', context_system::instance());
-    admin_externalpage_setup('tool_crawler_'.$report);
-}
 echo $OUTPUT->header();
 
 require('tabs.php');
