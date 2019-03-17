@@ -338,5 +338,15 @@ echo $OUTPUT->heading(get_string('numberurlsfound', 'tool_crawler',
 echo get_string($report . '_header', 'tool_crawler');
 echo html_writer::table($table);
 echo $OUTPUT->paging_bar($count, $page, $perpage, $baseurl);
+
+if ($report == 'broken'){
+    $export = '';
+    $export .= html_writer::start_div('centerpara');
+    $export .= html_writer::link(new moodle_url('/admin/tool/crawler/export.php', ['report' => $report]),
+        'Export as .xls', ['class' => 'btn btn-sm']);
+    $export .= html_writer::end_div();
+    echo $export;
+}
+
 echo $OUTPUT->footer();
 

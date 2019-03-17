@@ -61,6 +61,7 @@ $sudo -u www-data php scrape-as.php --url=http://ford.com/
 ';
 $string['configmissing'] = 'Config missing';
 $string['course'] = 'Course';
+$string['courseurl'] = 'Course URL';
 $string['curcrawlstart'] = 'Current crawl started at';
 $string['crawlend'] = 'Crawl end';
 $string['crawlstart'] = 'Crawl start';
@@ -82,6 +83,7 @@ $string['excludecourses'] = 'Exclude courses';
 $string['excludecoursesdesc'] = 'One course shortcode regex per line';
 $string['found'] = 'Found';
 $string['frompage'] = 'From page';
+$string['frompageurl'] = 'From page URL';
 $string['good'] = 'Good';
 $string['hellorobot'] = 'Hello robot: \'{$a->botusername}\'';
 $string['hellorobotheading'] = 'Hello robot!';
