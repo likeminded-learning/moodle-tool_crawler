@@ -153,4 +153,8 @@ $string['whenqueued'] = 'When queued';
  */
 $string["privacy:no_data_reason"] = "The Basic authentication plugin does not store any personal data.";
 $string['yes'] = 'Yes';
-
+/*
+ * Capabilities
+ */
+$string['crawler:viewreports'] = 'View link crawler reports';
+$string['crawler:changesettings'] = 'Change link crawler settings';
