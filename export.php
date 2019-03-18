@@ -31,6 +31,9 @@ $workbook->send($downloadfilename);
 // Adding the worksheet
 $myxls = $workbook->add_worksheet($report);
 
+// this has potential to get pretty big...
+raise_memory_limit(MEMORY_HUGE);
+
 switch ($report)
 {
     case 'broken':
@@ -97,6 +100,10 @@ switch ($report)
             // course url
             $myxls->write_url($row, $col++, new moodle_url('/course/view.php', ['id' => $row_data->courseid]));
         }
+
+        // discard potentially huge array
+        unset($data);
+
         break;
 
     default:
