@@ -33,6 +33,7 @@ $myxls = $workbook->add_worksheet($report);
 
 // this has potential to get pretty big...
 raise_memory_limit(MEMORY_HUGE);
+set_time_limit(0);
 
 switch ($report)
 {
